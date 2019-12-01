@@ -5,6 +5,7 @@ import com.sun.swh.work.tool.cache.SpecificationsCache;
 import com.sun.swh.work.tool.service.TurnoverService;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -18,6 +19,7 @@ import java.util.Map;
  * @Date: 2019/8/26 21:48
  * @Description:
  */
+@Service
 public class TurnoverServiceImpl implements TurnoverService {
 
 

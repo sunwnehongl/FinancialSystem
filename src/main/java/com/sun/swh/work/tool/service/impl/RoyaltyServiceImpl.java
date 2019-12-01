@@ -9,6 +9,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
  * @Date: 2019/8/30 22:30
  * @Description:
  */
+@Service
 public class RoyaltyServiceImpl implements RoyaltyService {
 
 
@@ -68,7 +70,7 @@ public class RoyaltyServiceImpl implements RoyaltyService {
     private List<Royalty> getRoyalty(XSSFWorkbook workbook) {
         List<Royalty> royaltyList = new ArrayList<>();
         Sheet sheet = workbook.getSheet("营业额");
-        for (int i = 1; i < sheet.getLastRowNum(); i++) {
+        for (int i = 1; i <=sheet.getLastRowNum(); i++) {
             Row row = sheet.getRow(i);
             if (row == null) {
                 continue;
@@ -135,11 +137,11 @@ public class RoyaltyServiceImpl implements RoyaltyService {
                         sumTime += storePromotionTemp.getAttendance();
                         royalties[i] = storePromotionTemp;
                     }
-                   for (StorePromotion royaltyTemp : royalties) {
-                       royaltyTemp.setFirstRoyalty(royaltyTemp.getFirstRoyalty()*(royaltyTemp.getAttendance()/sumTime));
-                       royaltyTemp.setSecondRoyalty(royaltyTemp.getSecondRoyalty()*(royaltyTemp.getAttendance()/sumTime));
-                       royaltyTemp.setRoyalty(royaltyTemp.getFirstRoyalty() + royaltyTemp.getSecondRoyalty());
-                   }
+                    for (StorePromotion royaltyTemp : royalties) {
+                        royaltyTemp.setFirstRoyalty(royaltyTemp.getFirstRoyalty()*(royaltyTemp.getAttendance()/sumTime));
+                        royaltyTemp.setSecondRoyalty(royaltyTemp.getSecondRoyalty()*(royaltyTemp.getAttendance()/sumTime));
+                        royaltyTemp.setRoyalty(royaltyTemp.getFirstRoyalty() + royaltyTemp.getSecondRoyalty());
+                    }
                     return royalties;
                 })
                 .flatMap(l -> Arrays.stream(l))
@@ -222,7 +224,7 @@ public class RoyaltyServiceImpl implements RoyaltyService {
         Map<String, Target> targetMap = new HashMap<>();
         XSSFWorkbook workbook = getWorkbook(filePath);
         XSSFSheet sheet = workbook.getSheetAt(0);
-        for (int i= 2;i <sheet.getLastRowNum(); i++){
+        for (int i= 2;i <=sheet.getLastRowNum(); i++){
             Row row = sheet.getRow(i);
             if (row == null) {
                 continue;
@@ -255,9 +257,6 @@ public class RoyaltyServiceImpl implements RoyaltyService {
                 double secondGoal = (target.getSecondGoal()/dayOfMonth)*attendance;
                 double firstRoyalty = 0;
                 double secondRoyalty = 0;
-                if (storeName.equals("地铁一店")){
-                    System.out.println("11");
-                }
                 if (turnover<=secondGoal&&turnover>firstGoal) {
                     firstRoyalty = (turnover - firstGoal) * 0.1;
                 } else if (turnover >secondGoal) {
@@ -308,8 +307,10 @@ public class RoyaltyServiceImpl implements RoyaltyService {
         Sheet sheet1 = workbook.getSheetAt(0);
         int i =1;
         for (StorePromotion storePromotion : storePromotionList) {
-            Row row = sheet1.createRow(i );
-
+            Row row = sheet1.getRow(i);
+            if (row == null) {
+                row = sheet1.createRow(i);
+            }
             Cell cell =row.createCell(0);
             cell.setCellValue(storePromotion.getStoreName());
 
@@ -332,13 +333,8 @@ public class RoyaltyServiceImpl implements RoyaltyService {
             cell.setCellValue(storePromotion.getRoyalty());
             i++;
         }
+        sheet1.setForceFormulaRecalculation(true);
         return workbook;
     }
-
-    public static void main(String[] args) {
-        RoyaltyServiceImpl royaltyServic = new RoyaltyServiceImpl();
-        royaltyServic.computationalRoyalty("D:\\营业额汇总20191005191701.xlsx");
-    }
-
 
 }

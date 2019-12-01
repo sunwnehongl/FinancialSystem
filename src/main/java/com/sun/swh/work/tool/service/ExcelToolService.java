@@ -1,5 +1,7 @@
 package com.sun.swh.work.tool.service;
 
+import com.sun.swh.work.tool.bean.Parameter;
+
 import java.util.List;
 
 /**
@@ -11,8 +13,8 @@ public interface ExcelToolService {
 
     /**
      *
-     * @param path
+     * @param parameter
      */
-    void createMothExcel(String path);
+    void createMothExcel(Parameter parameter);
 
 }

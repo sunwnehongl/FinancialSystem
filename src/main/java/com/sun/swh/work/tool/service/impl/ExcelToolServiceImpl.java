@@ -1,16 +1,13 @@
 package com.sun.swh.work.tool.service.impl;
 
+import com.sun.swh.work.tool.bean.Parameter;
 import com.sun.swh.work.tool.cache.SpecificationsCache;
 import com.sun.swh.work.tool.service.ExcelToolService;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFDataFormat;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -21,6 +18,7 @@ import java.util.*;
  * @Date: 2019/8/1 22:22
  * @Description:
  */
+@Service
 public class ExcelToolServiceImpl implements ExcelToolService {
 
     private static final String MODEL_EXCEL_FILE_NAME = "/model.xlsx";
@@ -28,17 +26,17 @@ public class ExcelToolServiceImpl implements ExcelToolService {
     private static Map<String, Map<String, Double>> SPECIFICATIONS = SpecificationsCache.getInstinse().getSpecificationsCache();
 
     @Override
-    public void createMothExcel(String path) {
+    public void createMothExcel(Parameter parameter) {
 
         SPECIFICATIONS.forEach((storeName,specificationsMap) -> {
             XSSFWorkbook xssfSheets = getModelExcel();
-            changModelExcel(xssfSheets,storeName,specificationsMap);
-            writeExcel(xssfSheets, path, storeName);
+            changModelExcel(xssfSheets,storeName,specificationsMap,parameter.getTime());
+            writeExcel(xssfSheets, parameter.getPath()+parameter.getTime(), storeName,parameter.getTime().split("-")[1]);
         });
 
     }
 
-    private void writeExcel(XSSFWorkbook xssfWorkbook, String filePath, String fileName) {
+    private void writeExcel(XSSFWorkbook xssfWorkbook, String filePath, String fileName,String time) {
 
 
         FileOutputStream fileOutputStream = null;
@@ -47,8 +45,7 @@ public class ExcelToolServiceImpl implements ExcelToolService {
             if (!fild.exists()) {
                 fild.mkdirs();
             }
-            Calendar cale = Calendar.getInstance();
-            File storeFile = new File(filePath + File.separator + fileName+ (cale.get(Calendar.MONTH)+1)+ ".xlsx");
+            File storeFile = new File(filePath + File.separator + fileName+ time + ".xlsx");
             if (!storeFile.exists()) {
                 storeFile.createNewFile();
             }
@@ -67,17 +64,17 @@ public class ExcelToolServiceImpl implements ExcelToolService {
         }
     }
 
-    private void changModelExcel(XSSFWorkbook xssfWorkbook,String storeName,Map<String, Double> specificationsMap) {
+    private void changModelExcel(XSSFWorkbook xssfWorkbook,String storeName,Map<String, Double> specificationsMap,String time) {
         XSSFSheet dayReportSheet = xssfWorkbook.getSheetAt(0);
         dayReportSheet.setForceFormulaRecalculation(true);
-        changeDayReportSheet(dayReportSheet,specificationsMap);
-        changePurchase(xssfWorkbook.getSheetAt(1),storeName);
-        changeBusiness(xssfWorkbook.getSheetAt(2),storeName);
+        changeDayReportSheet(dayReportSheet,specificationsMap,time);
+        changePurchase(xssfWorkbook.getSheetAt(1),storeName,time);
+        changeBusiness(xssfWorkbook.getSheetAt(2),storeName,time);
     }
 
-    private void changeDayReportSheet(XSSFSheet dayReportSheet,Map<String, Double> specificationsMap) {
+    private void changeDayReportSheet(XSSFSheet dayReportSheet,Map<String, Double> specificationsMap,String time) {
         int length = dayReportSheet.getLastRowNum();
-        List<Date> times = getAllMothDayTime();
+        List<Date> times = getAllMothDayTime(time);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/M/d");
         for (int i = 0; i <= length; i++) {
             Row row = dayReportSheet.getRow(i);
@@ -118,23 +115,23 @@ public class ExcelToolServiceImpl implements ExcelToolService {
      * 自动生成进货额报表的日期和店名
      * @param purchase
      */
-    private void changePurchase(XSSFSheet purchase,String storeName) {
-        changeDateAndStoreName(purchase,storeName,0,1);
+    private void changePurchase(XSSFSheet purchase,String storeName,String time) {
+        changeDateAndStoreName(purchase,storeName,0,1,time);
     }
 
     /**
      *
      */
-    private void changeBusiness(XSSFSheet business,String storeName) {
-        changeDateAndStoreName(business,storeName,0,20);
+    private void changeBusiness(XSSFSheet business,String storeName,String time) {
+        changeDateAndStoreName(business,storeName,0,20,time);
     }
 
     /**
      * 自动生成进货额报表的日期和店名
      * @param purchase
      */
-    private void changeDateAndStoreName(XSSFSheet purchase,String storeName,int a,int b) {
-        List<Date> times = getAllMothDayTime();
+    private void changeDateAndStoreName(XSSFSheet purchase,String storeName,int a,int b,String time) {
+        List<Date> times = getAllMothDayTime(time);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/M/d");
         for (int i = 1; i <= times.size(); i++) {
             Row row = purchase.getRow(i);
@@ -155,11 +152,12 @@ public class ExcelToolServiceImpl implements ExcelToolService {
         }
     }
 
-    private List<Date> getAllMothDayTime() {
+    private List<Date> getAllMothDayTime(String time) {
         List<Date> times = new ArrayList<>();
 
         Calendar cale = Calendar.getInstance();
-        cale.set(Calendar.DAY_OF_MONTH, 1);
+        String[] timeArray = time.split("-");
+        cale.set(Integer.valueOf(timeArray[0]),Integer.valueOf(timeArray[1])-1,1);
         cale.set(Calendar.HOUR, 0);
         cale.set(Calendar.MINUTE, 0);
         cale.set(Calendar.MILLISECOND, 0);

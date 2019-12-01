@@ -7,6 +7,7 @@ import com.sun.swh.work.tool.service.PurchaseService;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -17,6 +18,7 @@ import java.util.*;
  * @Date: 2019/8/23 21:50
  * @Description: 进货额汇总，对一个月的进货额进行汇总接口的实现类
  */
+@Service
 public class PurchaseServiceImpl implements PurchaseService {
 
     private static final String MODEL_EXCEL_FILE_NAME = "/进货额汇总.xlsx";
