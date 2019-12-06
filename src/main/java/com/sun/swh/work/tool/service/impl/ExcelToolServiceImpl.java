@@ -7,6 +7,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -21,7 +23,7 @@ import java.util.*;
 @Service
 public class ExcelToolServiceImpl implements ExcelToolService {
 
-    private static final String MODEL_EXCEL_FILE_NAME = "/model.xlsx";
+    private static final String MODEL_EXCEL_FILE_NAME = "model.xlsx";
 
     private static Map<String, Map<String, Double>> SPECIFICATIONS = SpecificationsCache.getInstinse().getSpecificationsCache();
 
@@ -173,8 +175,8 @@ public class ExcelToolServiceImpl implements ExcelToolService {
         XSSFWorkbook sXSSFWorkbook = null;
         InputStream inputStream = null;
         try {
-            String path = this.getClass().getClassLoader().getResource("").getPath();
-            inputStream = new FileInputStream(path + MODEL_EXCEL_FILE_NAME);
+            Resource resource = new ClassPathResource(MODEL_EXCEL_FILE_NAME);
+            inputStream = resource.getInputStream();
             sXSSFWorkbook = new XSSFWorkbook(inputStream);
         } catch (Exception e) {
             e.printStackTrace();

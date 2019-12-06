@@ -1,5 +1,6 @@
 package com.sun.swh.work.tool.service.impl;
 
+import com.sun.swh.work.tool.WorkbookUtil;
 import com.sun.swh.work.tool.bean.Purchase;
 import com.sun.swh.work.tool.bean.StoreExcel;
 import com.sun.swh.work.tool.cache.SpecificationsCache;
@@ -21,15 +22,14 @@ import java.util.*;
 @Service
 public class PurchaseServiceImpl implements PurchaseService {
 
-    private static final String MODEL_EXCEL_FILE_NAME = "/进货额汇总.xlsx";
+    private static final String MODEL_EXCEL_FILE_NAME = "进货额汇总.xlsx";
 
-    private static Map<String, Map<String, Double>> SPECIFICATIONS = SpecificationsCache.getInstinse().getSpecificationsCache();
 
     @Override
     public void establish(String filePath) {
         List<StoreExcel> storeExcelList = getStoreExcelList(filePath);
         List<Purchase> purchaseList = getPurchaseList(storeExcelList);
-        XSSFWorkbook workbook = getWorkbook(getPurchaseExcelModelFilePath());
+        XSSFWorkbook workbook = WorkbookUtil.getWorkbook(MODEL_EXCEL_FILE_NAME,true);
         writePurchaseToWorkbook(workbook,purchaseList);
         writePurchaseToExcel(workbook,filePath);
     }
@@ -40,6 +40,7 @@ public class PurchaseServiceImpl implements PurchaseService {
      * @return 每家店的月度报表对象集合
      */
     private List<StoreExcel> getStoreExcelList(String filePath){
+        Map<String, Map<String, Double>> SPECIFICATIONS = SpecificationsCache.getInstinse().getSpecificationsCache();
         List<StoreExcel> storeExcelList = new ArrayList<>(100);
         File directory = new File(filePath);
         if (directory.exists() && directory.isDirectory()) {
@@ -71,7 +72,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     private List<Purchase> analysisExcel(StoreExcel storeExcel) {
         List<Purchase> purchaseList = new ArrayList<>();
-        XSSFWorkbook workbook = getWorkbook(storeExcel.getFilePath());;
+        XSSFWorkbook workbook = WorkbookUtil.getWorkbook(storeExcel.getFilePath(),false);
         XSSFSheet sheet = workbook.getSheet("日报表");
         if (sheet != null) {
             Date date = null;
@@ -143,32 +144,6 @@ public class PurchaseServiceImpl implements PurchaseService {
         return storeName;
     }
 
-    private XSSFWorkbook getWorkbook(String filePath) {
-        XSSFWorkbook sXSSFWorkbook = null;
-        InputStream inputStream = null;
-        try {
-            inputStream = new FileInputStream(filePath);
-            sXSSFWorkbook = new XSSFWorkbook(inputStream);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return sXSSFWorkbook;
-    }
-
-    private String getPurchaseExcelModelFilePath() {
-        String filePath = "";
-        filePath = this.getClass().getClassLoader().getResource("").getPath();
-        filePath += MODEL_EXCEL_FILE_NAME;
-        return filePath;
-    }
 
     private void writePurchaseToWorkbook(XSSFWorkbook workbook,List<Purchase> purchaseList) {
         Sheet sheet = workbook.getSheetAt(0);
@@ -238,12 +213,6 @@ public class PurchaseServiceImpl implements PurchaseService {
                 }
             }
         }
-    }
-
-    public static void main(String[] args) {
-       PurchaseServiceImpl purchaseService = new PurchaseServiceImpl();
-        List<StoreExcel> storeExcelList =purchaseService.getStoreExcelList("C:\\Users\\swh\\Desktop\\2019-09");
-        purchaseService.establish("C:\\Users\\swh\\Desktop\\2019-09");
     }
 
 }

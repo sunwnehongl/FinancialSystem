@@ -1,5 +1,6 @@
 package com.sun.swh.work.tool.service.impl;
 
+import com.sun.swh.work.tool.WorkbookUtil;
 import com.sun.swh.work.tool.bean.StoreExcel;
 import com.sun.swh.work.tool.cache.SpecificationsCache;
 import com.sun.swh.work.tool.service.TurnoverService;
@@ -23,14 +24,14 @@ import java.util.Map;
 public class TurnoverServiceImpl implements TurnoverService {
 
 
-    private static final String MODEL_EXCEL_FILE_NAME = "/营业额汇总.xlsx";
+    private static final String MODEL_EXCEL_FILE_NAME = "营业额汇总.xlsx";
 
     private static Map<String, Map<String, Double>> SPECIFICATIONS = SpecificationsCache.getInstinse().getSpecificationsCache();
 
     @Override
     public void establish(String filePath) {
         List<StoreExcel> storeExcelList = getStoreExcelList(filePath);
-        XSSFWorkbook workbook = getWorkbook(getExcelModelFilePath());
+        XSSFWorkbook workbook = WorkbookUtil.getWorkbook(MODEL_EXCEL_FILE_NAME, true);
         copyTurnoverData(workbook,storeExcelList);
         saveExcel(workbook,filePath);
 
@@ -190,10 +191,5 @@ public class TurnoverServiceImpl implements TurnoverService {
                 }
             }
         }
-    }
-
-    public static void main(String[] args) {
-        TurnoverService turnoverService = new TurnoverServiceImpl();
-        turnoverService.establish("C:\\Users\\swh\\Desktop\\2019-09");
     }
 }

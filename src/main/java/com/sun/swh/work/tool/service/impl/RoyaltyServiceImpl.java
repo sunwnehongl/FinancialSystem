@@ -1,5 +1,6 @@
 package com.sun.swh.work.tool.service.impl;
 
+import com.sun.swh.work.tool.WorkbookUtil;
 import com.sun.swh.work.tool.bean.Royalty;
 import com.sun.swh.work.tool.bean.StorePromotion;
 import com.sun.swh.work.tool.bean.Target;
@@ -32,8 +33,7 @@ public class RoyaltyServiceImpl implements RoyaltyService {
 
 
         List<StorePromotion> storePromotionList = listStorePromotion(list);
-        String path = this.getClass().getClassLoader().getResource("").getPath()+"任务.xlsx";
-        Map<String, Target> targetMap = stringTargetMap(path);
+        Map<String, Target> targetMap = stringTargetMap();
         setStorePromotion(storePromotionList, targetMap);
         storePromotionList = formatRoyalty(storePromotionList);
         storePromotionList = mergeBySalesman(storePromotionList);
@@ -217,12 +217,11 @@ public class RoyaltyServiceImpl implements RoyaltyService {
 
     /**
      * 解析对应店设定的目标，
-     * @param filePath 文件目录
      * @return 门店名称对应设定的目标
      */
-    private Map<String, Target> stringTargetMap(String filePath) {
+    private Map<String, Target> stringTargetMap() {
         Map<String, Target> targetMap = new HashMap<>();
-        XSSFWorkbook workbook = getWorkbook(filePath);
+        XSSFWorkbook workbook = WorkbookUtil.getWorkbook("任务.xlsx", true);
         XSSFSheet sheet = workbook.getSheetAt(0);
         for (int i= 2;i <=sheet.getLastRowNum(); i++){
             Row row = sheet.getRow(i);
