@@ -12,6 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,6 +30,7 @@ import java.util.regex.Pattern;
  * @Date: 2019/12/6 22:57
  * @Description:
  */
+@Component
 public class RepetitionServiceImpl implements RepetitionService {
 
     @Override

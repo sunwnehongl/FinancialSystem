@@ -302,7 +302,7 @@
                         <span>进货额汇总</span>
                     </a>
                 </li>
-                <li class="active">
+                <li class="sub-menu">
                     <a href="/TurnoverReport.html"  class="">
                         <i class="icon-cogs"></i>
                         <span>营业额汇总</span>
@@ -314,7 +314,7 @@
                         <span>提成计算</span>
                     </a>
                 </li>
-                <li class="sub-menu">
+                <li class="active">
                     <a href="/Repetition.html" class="">
                         <i class="icon-tasks"></i>
                         <span>复称填报</span>
@@ -348,7 +348,13 @@
                 <div class="col-lg-8">
                     <form class="layui-form" οnsubmit="return false" lay-filter="example">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">目录</label>
+                            <label class="layui-form-label">复称文件</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="fileName"  required  lay-verify="required" placeholder="请输需要汇总的月度报表路径" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">日报表目录</label>
                             <div class="layui-input-block">
                                 <input type="text" name="path"  required  lay-verify="required" placeholder="请输入需要营业额汇总的月度报表目录" class="layui-input">
                             </div>
@@ -385,7 +391,7 @@
 <script src="js/sparkline-chart.js"></script>
 <script src="js/easy-pie-chart.js"></script>
 <script src="/layui/layui.js"></script>
-<script src="js/TurnoverReport.js"></script>
+<script src="js/Repetition.js"></script>
 <script>
 
       //owl carousel

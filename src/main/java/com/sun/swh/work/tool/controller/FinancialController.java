@@ -2,10 +2,7 @@ package com.sun.swh.work.tool.controller;
 
 import com.sun.swh.work.tool.bean.Parameter;
 import com.sun.swh.work.tool.bean.Purchase;
-import com.sun.swh.work.tool.service.ExcelToolService;
-import com.sun.swh.work.tool.service.PurchaseService;
-import com.sun.swh.work.tool.service.RoyaltyService;
-import com.sun.swh.work.tool.service.TurnoverService;
+import com.sun.swh.work.tool.service.*;
 import com.sun.swh.work.tool.service.impl.TurnoverServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,6 +29,9 @@ public class FinancialController {
 
     @Autowired
     private RoyaltyService royaltyService;
+
+    @Autowired
+    private RepetitionService repetitionService;
     @RequestMapping(value = "/createMothExcel",method = {RequestMethod.POST,RequestMethod.GET})
     public String createMothExcel(@RequestBody Parameter parameter) {
         excelToolService.createMothExcel(parameter);
@@ -53,6 +53,12 @@ public class FinancialController {
     @RequestMapping(value = "/createRoyaltyExcel",method = {RequestMethod.POST,RequestMethod.GET})
     public String createRoyaltyExcel(@RequestBody Parameter parameter) {
         royaltyService.computationalRoyalty(parameter.getPath());
+        return "true";
+    }
+
+    @RequestMapping(value = "/writeRepetition",method = {RequestMethod.POST,RequestMethod.GET})
+    public String writeRepetition(@RequestBody Parameter parameter){
+        repetitionService.writeRepetition(parameter.getPath(),parameter.getFileName());
         return "true";
     }
 

@@ -4,6 +4,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,7 +22,7 @@ import java.util.Map;
  */
 public class SpecificationsCache {
 
-    private static final String MODEL_EXCEL_FILE_NAME = "/门店规格.xlsx";
+    private static final String MODEL_EXCEL_FILE_NAME = "门店规格.xlsx";
 
     private static final Map<String, Map<String, Double>> SPECIFICATIONS = new HashMap<>();
 
@@ -40,8 +42,8 @@ public class SpecificationsCache {
         XSSFWorkbook sXSSFWorkbook = null;
         InputStream inputStream = null;
         try {
-            String path = this.getClass().getClassLoader().getResource("").getPath();
-            inputStream = new FileInputStream(path + MODEL_EXCEL_FILE_NAME);
+            Resource res = new ClassPathResource(MODEL_EXCEL_FILE_NAME);
+            inputStream = res.getInputStream();
             sXSSFWorkbook = new XSSFWorkbook(inputStream);
         } catch (Exception e) {
             e.printStackTrace();

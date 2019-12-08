@@ -8,6 +8,7 @@ package com.sun.swh.work.tool.bean;
 public class Parameter {
     private String path;
     private String time;
+    private String fileName;
 
     public String getPath() {
         return path;
@@ -23,5 +24,13 @@ public class Parameter {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }
