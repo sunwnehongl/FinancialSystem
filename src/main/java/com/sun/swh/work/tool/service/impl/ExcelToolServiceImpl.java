@@ -1,5 +1,6 @@
 package com.sun.swh.work.tool.service.impl;
 
+import com.sun.swh.work.tool.WorkbookUtil;
 import com.sun.swh.work.tool.bean.Parameter;
 import com.sun.swh.work.tool.cache.SpecificationsCache;
 import com.sun.swh.work.tool.service.ExcelToolService;
@@ -31,7 +32,7 @@ public class ExcelToolServiceImpl implements ExcelToolService {
     public void createMothExcel(Parameter parameter) {
 
         SPECIFICATIONS.forEach((storeName,specificationsMap) -> {
-            XSSFWorkbook xssfSheets = getModelExcel();
+            XSSFWorkbook xssfSheets = WorkbookUtil.getWorkbook(MODEL_EXCEL_FILE_NAME,true);
             changModelExcel(xssfSheets,storeName,specificationsMap,parameter.getTime());
             writeExcel(xssfSheets, parameter.getPath()+parameter.getTime(), storeName,parameter.getTime());
         });
@@ -169,26 +170,5 @@ public class ExcelToolServiceImpl implements ExcelToolService {
             cale.add(Calendar.DAY_OF_MONTH, 1);
         } while (currentMoth == cale.get(Calendar.MONTH));
         return times;
-    }
-
-    private XSSFWorkbook getModelExcel() {
-        XSSFWorkbook sXSSFWorkbook = null;
-        InputStream inputStream = null;
-        try {
-            Resource resource = new ClassPathResource(MODEL_EXCEL_FILE_NAME);
-            inputStream = resource.getInputStream();
-            sXSSFWorkbook = new XSSFWorkbook(inputStream);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return sXSSFWorkbook;
     }
 }

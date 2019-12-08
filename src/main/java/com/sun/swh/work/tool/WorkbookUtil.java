@@ -17,12 +17,10 @@ public class WorkbookUtil {
         XSSFWorkbook sXSSFWorkbook = null;
         InputStream inputStream = null;
         try {
-            if (!isName) {
-                inputStream = new FileInputStream(new File(filePath));
-            } else {
-                Resource rs = new ClassPathResource(filePath);
-                inputStream = rs.getInputStream();
+            if (isName) {
+                filePath = System.getProperty("user.dir") + "/config/" + filePath;
             }
+            inputStream = new FileInputStream(new File(filePath));
             sXSSFWorkbook = new XSSFWorkbook(inputStream);
         } catch (Exception e) {
             e.printStackTrace();

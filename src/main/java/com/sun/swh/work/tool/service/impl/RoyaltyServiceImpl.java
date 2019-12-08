@@ -28,7 +28,7 @@ public class RoyaltyServiceImpl implements RoyaltyService {
 
     @Override
     public void computationalRoyalty(String filePath) {
-        XSSFWorkbook workbook = getWorkbook(filePath);
+        XSSFWorkbook workbook = WorkbookUtil.getWorkbook(filePath, false);
         List<Royalty> list = getRoyalty(workbook);
 
 
@@ -41,25 +41,6 @@ public class RoyaltyServiceImpl implements RoyaltyService {
         writeRoyaltyToExcel(dataWorkbook,filePath.substring(0,filePath.lastIndexOf(File.separator)));
     }
 
-    private XSSFWorkbook getWorkbook(String filePath) {
-        XSSFWorkbook sXSSFWorkbook = null;
-        InputStream inputStream = null;
-        try {
-            inputStream = new FileInputStream(filePath);
-            sXSSFWorkbook = new XSSFWorkbook(inputStream);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return sXSSFWorkbook;
-    }
 
     /**
      * 解析营业额汇总中的数据
@@ -301,8 +282,7 @@ public class RoyaltyServiceImpl implements RoyaltyService {
     }
 
     private XSSFWorkbook writeRoyaltyToWorkbook(List<StorePromotion> storePromotionList) {
-        String path = this.getClass().getClassLoader().getResource("").getPath()+"提成.xlsx";
-        XSSFWorkbook workbook = getWorkbook(path);
+        XSSFWorkbook workbook = WorkbookUtil.getWorkbook("提成.xlsx",true);
         Sheet sheet1 = workbook.getSheetAt(0);
         int i =1;
         for (StorePromotion storePromotion : storePromotionList) {
