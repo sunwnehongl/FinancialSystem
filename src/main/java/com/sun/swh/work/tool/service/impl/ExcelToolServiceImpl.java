@@ -33,7 +33,7 @@ public class ExcelToolServiceImpl implements ExcelToolService {
         SPECIFICATIONS.forEach((storeName,specificationsMap) -> {
             XSSFWorkbook xssfSheets = getModelExcel();
             changModelExcel(xssfSheets,storeName,specificationsMap,parameter.getTime());
-            writeExcel(xssfSheets, parameter.getPath()+parameter.getTime(), storeName,parameter.getTime().split("-")[1]);
+            writeExcel(xssfSheets, parameter.getPath()+parameter.getTime(), storeName,parameter.getTime());
         });
 
     }
