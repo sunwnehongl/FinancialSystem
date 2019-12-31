@@ -1,5 +1,6 @@
 package com.sun.swh.work.tool.cache;
 
+import com.sun.swh.work.tool.WorkbookUtil;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -29,34 +30,8 @@ public class SpecificationsCache {
     private static SpecificationsCache specificationsCache = new SpecificationsCache();
 
     private SpecificationsCache(){
-        XSSFWorkbook workbook = getModelExcel();
+        XSSFWorkbook workbook = WorkbookUtil.getWorkbook(MODEL_EXCEL_FILE_NAME,true);
         initDate(workbook);
-    }
-
-    /**
-     * 得到门店规格Excel的工作簿
-     *
-     * @return 门店规格Excel的工作簿
-     */
-    private XSSFWorkbook getModelExcel() {
-        XSSFWorkbook sXSSFWorkbook = null;
-        InputStream inputStream = null;
-        try {
-            Resource res = new ClassPathResource(MODEL_EXCEL_FILE_NAME);
-            inputStream = res.getInputStream();
-            sXSSFWorkbook = new XSSFWorkbook(inputStream);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return sXSSFWorkbook;
     }
 
     /**
