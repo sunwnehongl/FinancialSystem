@@ -5,6 +5,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @Auther: swh
@@ -58,5 +60,20 @@ public class WorkbookUtil {
                 }
             }
         }
+    }
+
+    /**
+     * 通过文件名得到对应店的名称
+     * @param fileName 文件名称
+     * @return 店名
+     */
+    public static String getStorName(String fileName) {
+        String storeName = "";
+        Pattern p = Pattern.compile("[\\u4E00-\\u9FA5]+");
+        Matcher m = p.matcher(fileName);
+        while (m.find()) {
+            storeName = m.group(0);
+        }
+        return storeName;
     }
 }

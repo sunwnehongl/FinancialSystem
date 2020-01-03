@@ -92,6 +92,7 @@ public class RepetitionServiceImpl implements RepetitionService {
                 break;
             }
         }
+        sheet.setForceFormulaRecalculation(true);
         WorkbookUtil.writeExcel(workbook,filePath);
     }
 

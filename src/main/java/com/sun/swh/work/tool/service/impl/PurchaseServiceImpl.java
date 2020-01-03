@@ -46,7 +46,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         if (directory.exists() && directory.isDirectory()) {
             File[] files = directory.listFiles();
             for (File file : files) {
-                String storeName = getStorName(file.getName());
+                String storeName = WorkbookUtil.getStorName(file.getName());
                 if (!SPECIFICATIONS.containsKey(storeName)) {
                     continue;
                 }
@@ -123,25 +123,6 @@ public class PurchaseServiceImpl implements PurchaseService {
         purchase.setLessGoods(row.getCell(22).getNumericCellValue());
         purchase.setMoreGoods(row.getCell(23).getNumericCellValue());
         return purchase;
-    }
-
-
-
-    /**
-     * 通过文件名得到对应店的名称
-     * @param fileName 文件名称
-     * @return 店名
-     */
-    private String getStorName(String fileName) {
-        String storeName = "";
-        storeName = fileName.split("\\.")[0] ;
-        for (int i =  storeName.length() -1 ;i >0; i--) {
-            if (storeName.charAt(i) < 48 || storeName.charAt(i) > 57) {
-                storeName = storeName.substring(0, i+1);
-                break;
-            }
-        }
-        return storeName;
     }
 
 
