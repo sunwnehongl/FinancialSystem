@@ -107,7 +107,7 @@ public class ExcelToolServiceImpl implements ExcelToolService {
             String typeName = cell.getStringCellValue();
             Double value = specificationsMap.get(typeName);
             if (value != null) {
-                Cell specificationsCell =  row.getCell(14);
+                Cell specificationsCell =  row.getCell(15);
                 specificationsCell.setCellType(Cell.CELL_TYPE_NUMERIC);
                 specificationsCell.setCellValue(value);
             }
