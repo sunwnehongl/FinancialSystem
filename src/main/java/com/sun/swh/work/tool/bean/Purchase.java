@@ -51,6 +51,16 @@ public class Purchase {
      */
     private double discount;
 
+    /**
+     * 招待
+     */
+    private double entertain;
+
+    /**
+     * 饮料
+     */
+    private double drinks;
+
     public double getDiscount() {
         return discount;
     }
@@ -129,5 +139,21 @@ public class Purchase {
 
     public void setMoreGoods(double moreGoods) {
         this.moreGoods = moreGoods;
+    }
+
+    public double getEntertain() {
+        return entertain;
+    }
+
+    public void setEntertain(double entertain) {
+        this.entertain = entertain;
+    }
+
+    public double getDrinks() {
+        return drinks;
+    }
+
+    public void setDrinks(double drinks) {
+        this.drinks = drinks;
     }
 }

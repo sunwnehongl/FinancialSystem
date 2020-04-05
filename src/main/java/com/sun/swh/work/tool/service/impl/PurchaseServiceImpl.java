@@ -115,13 +115,15 @@ public class PurchaseServiceImpl implements PurchaseService {
         Purchase purchase = new Purchase();
         purchase.setTime(date);
         purchase.setStoreName(storeName);
-        purchase.setPurchaseCount(row.getCell(17).getNumericCellValue());
-        purchase.setTransferAmount(row.getCell(18).getNumericCellValue());
-        purchase.setRedeployedAmount(row.getCell(19).getNumericCellValue());
-        purchase.setReportLoss(row.getCell(20).getNumericCellValue());
-        purchase.setTrialEatingHospitality(row.getCell(21).getNumericCellValue());
-        purchase.setLessGoods(row.getCell(22).getNumericCellValue());
-        purchase.setMoreGoods(row.getCell(23).getNumericCellValue());
+        purchase.setPurchaseCount(row.getCell(2).getNumericCellValue());
+        purchase.setTransferAmount(row.getCell(3).getNumericCellValue());
+        purchase.setRedeployedAmount(row.getCell(4).getNumericCellValue());
+        purchase.setReportLoss(row.getCell(6).getNumericCellValue());
+        purchase.setTrialEatingHospitality(row.getCell(7).getNumericCellValue());
+        purchase.setEntertain(row.getCell(8).getNumericCellValue());
+        purchase.setLessGoods(row.getCell(10).getNumericCellValue());
+        purchase.setMoreGoods(row.getCell(11).getNumericCellValue());
+        purchase.setDrinks(row.getCell(1).getNumericCellValue());
         return purchase;
     }
 
@@ -159,14 +161,20 @@ public class PurchaseServiceImpl implements PurchaseService {
             Cell trialEatingHospitalityCell =row.createCell(6);
             trialEatingHospitalityCell.setCellValue(purchase.getTrialEatingHospitality());
 
-            Cell lessGoodsCell =row.createCell(7);
+            Cell entertainCell =row.createCell(7);
+            entertainCell.setCellValue(purchase.getEntertain());
+
+            Cell lessGoodsCell =row.createCell(8);
             lessGoodsCell.setCellValue(purchase.getLessGoods());
 
-            Cell moreGoodsCell =row.createCell(8);
+            Cell moreGoodsCell =row.createCell(9);
             moreGoodsCell.setCellValue(purchase.getMoreGoods());
 
-            Cell discountCell = row.createCell(9);
+            Cell discountCell = row.createCell(10);
             discountCell.setCellValue(purchase.getDiscount());
+
+            Cell drinkCell = row.createCell(11);
+            drinkCell.setCellValue(purchase.getDrinks());
         }
 
     }

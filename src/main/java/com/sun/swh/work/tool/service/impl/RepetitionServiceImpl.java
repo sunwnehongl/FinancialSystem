@@ -43,19 +43,22 @@ public class RepetitionServiceImpl implements RepetitionService {
         Date time = getTime(repetition.getTime());
         File file = new File(path);
         File[] storeFiles = file.listFiles();
-        Map<String,Map<String,Double>> data = repetition.getData();
+        Map<String, List<Map<String, Double>>> data = repetition.getData();
         for (File sotreFile : storeFiles) {
 
             if (sotreFile.isFile()) {
                 String storeName = getStoreName(sotreFile.getName());
-                Map<String, Double> dataMap = data.get(storeName);
-                if (dataMap == null) {
+                List<Map<String, Double>> dataList = data.get(storeName);
+                if (dataList == null) {
                     continue;
                 }
 
                 System.out.println(sotreFile.getPath());
-
-                writeExcel(sotreFile.getPath(),dataMap,time);
+                for (Map<String, Double> dataMap : dataList) {
+                    Double timeValue = dataMap.get("TIME");
+                    long timelong = Double.valueOf(timeValue).longValue();
+                    writeExcel(sotreFile.getPath(),dataMap,new Date(timelong));
+                }
 
             }
         }
@@ -84,7 +87,7 @@ public class RepetitionServiceImpl implements RepetitionService {
                 }
                 Double data = dataMap.get(type);
                 if (data != null) {
-                    row.getCell(8).setCellValue(data);
+                    row.getCell(9).setCellValue(data);
                 }
 
             }
@@ -123,7 +126,7 @@ public class RepetitionServiceImpl implements RepetitionService {
     }
     private Date getTime(String time){
         Date date = null;
-        DateFormat df = new SimpleDateFormat("yyyy年MM月dd日", Locale.CHINA);
+        DateFormat df = new SimpleDateFormat("yyyy年MM月dd日 mm:ss", Locale.CHINA);
         try {
             date = df.parse(time);
             Calendar calendar = Calendar.getInstance();
@@ -142,29 +145,39 @@ public class RepetitionServiceImpl implements RepetitionService {
         HSSFSheet sheet = workbook.getSheetAt(0);
 
         Map<Integer, String> handMap = getHanderList(sheet.getRow(0));
-        Map<String, Map<String, Double>> data = new HashMap<>();
         String storeName = null;
+        String time = "";
+        Map<String, Date> cach = new HashMap<>();
+        Map<String,List<Map<String, Double>>> dataMap = new HashMap<>();
         for (int i = 1; i < sheet.getLastRowNum(); i++) {
             HSSFRow row = sheet.getRow(i);
             if (row == null) {
                 break;
 
             }
-            storeName = row.getCell(3).getStringCellValue();
-            Map<String, Double> map = data.computeIfAbsent(storeName, k -> new HashMap<>());
-            for (int j = 7; j < row.getLastCellNum(); j++) {
+            time = row.getCell(3).getStringCellValue();
+            Date date = cach.get(time);
+            if (date == null) {
+                date = getTime(time);
+            }
+            storeName = row.getCell(5).getStringCellValue();
+            List<Map<String, Double>> dataList = dataMap.computeIfAbsent(storeName, k -> new ArrayList<>());
+            Map<String, Double> map = new HashMap<>();
+            for (int j = 9; j < row.getLastCellNum(); j++) {
                 String type = handMap.get(j);
                 if ("营业额合计".equals(type)) {
                     break;
                 }
                 map.put(type,row.getCell(j).getNumericCellValue());
             }
+            map.put("TIME", Double.valueOf(date.getTime()));
+            dataList.add(map);
 
         }
         Repetition repetition = new Repetition();
-        String time = sheet.getRow(1).getCell(2).getStringCellValue();
+
         repetition.setTime(time);
-        repetition.setData(data);
+        repetition.setData(dataMap);
         return repetition;
     }
 
@@ -204,7 +217,7 @@ public class RepetitionServiceImpl implements RepetitionService {
 
     public static void main(String[] args) {
         RepetitionService repetitionService = new RepetitionServiceImpl();
-        repetitionService.writeRepetition("C:\\Users\\swh\\Desktop\\2019-11",
-                "C:\\Users\\swh\\Desktop\\复称原存货明细报表20191108-20191108.xls");
+        repetitionService.writeRepetition("D:\\2020-04",
+                "C:\\Users\\swh\\Desktop\\20200405151044826.xls");
     }
 }
