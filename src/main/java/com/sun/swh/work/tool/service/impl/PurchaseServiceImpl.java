@@ -99,7 +99,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
                 if (cell.getCellType()==Cell.CELL_TYPE_STRING && "折扣".equals(cell.getStringCellValue())) {
                     if (purchase != null) {
-                        Cell discountCell = row.getCell(13);
+                        Cell discountCell = row.getCell(14);
                         if (discountCell != null) {
                             purchase.setDiscount(discountCell.getNumericCellValue());
                         }
@@ -164,14 +164,16 @@ public class PurchaseServiceImpl implements PurchaseService {
             Cell entertainCell =row.createCell(7);
             entertainCell.setCellValue(purchase.getEntertain());
 
-            Cell lessGoodsCell =row.createCell(8);
+            Cell discountCell = row.createCell(8);
+            discountCell.setCellValue(purchase.getDiscount());
+
+            Cell lessGoodsCell =row.createCell(9);
             lessGoodsCell.setCellValue(purchase.getLessGoods());
 
-            Cell moreGoodsCell =row.createCell(9);
+            Cell moreGoodsCell =row.createCell(10);
             moreGoodsCell.setCellValue(purchase.getMoreGoods());
 
-            Cell discountCell = row.createCell(10);
-            discountCell.setCellValue(purchase.getDiscount());
+
 
             Cell drinkCell = row.createCell(11);
             drinkCell.setCellValue(purchase.getDrinks());
