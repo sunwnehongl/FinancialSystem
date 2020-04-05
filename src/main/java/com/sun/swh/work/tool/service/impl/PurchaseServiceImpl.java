@@ -77,7 +77,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         if (sheet != null) {
             Date date = null;
             Purchase purchase = null;
-            for (int i = 1; i < sheet.getLastRowNum(); i++) {
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
                 if (row == null) {
                     continue;

@@ -241,7 +241,7 @@ public class RoyaltyServiceImpl implements RoyaltyService {
                     firstRoyalty = (turnover - firstGoal) * 0.1;
                 } else if (turnover >secondGoal) {
                     firstRoyalty = (secondGoal- firstGoal) * 0.1;
-                    secondRoyalty = (turnover - secondGoal) * 0.1;
+                    secondRoyalty = (turnover - secondGoal) * 0.15;
                 }
                 storePromotion.setFirstRoyalty(firstRoyalty);
                 storePromotion.setSecondRoyalty(secondRoyalty);

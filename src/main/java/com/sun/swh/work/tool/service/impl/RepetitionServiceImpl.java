@@ -149,7 +149,7 @@ public class RepetitionServiceImpl implements RepetitionService {
         String time = "";
         Map<String, Date> cach = new HashMap<>();
         Map<String,List<Map<String, Double>>> dataMap = new HashMap<>();
-        for (int i = 1; i < sheet.getLastRowNum(); i++) {
+        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
             HSSFRow row = sheet.getRow(i);
             if (row == null) {
                 break;
