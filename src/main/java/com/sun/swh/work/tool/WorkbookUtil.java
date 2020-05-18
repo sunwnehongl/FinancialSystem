@@ -76,8 +76,4 @@ public class WorkbookUtil {
         }
         return storeName;
     }
-
-    public static void main(String[] args) {
-        System.out.println(getStorName("楚州万达2019-12"));
-    }
 }
