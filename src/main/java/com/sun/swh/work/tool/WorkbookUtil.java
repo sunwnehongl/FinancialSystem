@@ -70,12 +70,14 @@ public class WorkbookUtil {
      * @return 店名
      */
     public static String getStorName(String fileName) {
-        String storeName = "";
-        Pattern p = Pattern.compile("[\\u4E00-\\u9FA5]+");
-        Matcher m = p.matcher(fileName);
-        while (m.find()) {
-            storeName = m.group(0);
+        String storeName = fileName.split("\\.")[0];
+        if (storeName.length() > 7) {
+            storeName = storeName.substring(0,storeName.length() - 7);
         }
         return storeName;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getStorName("楚州万达2019-12"));
     }
 }
